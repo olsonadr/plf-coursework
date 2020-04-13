@@ -1,2 +1,2 @@
 language = "haskell"
-run = "ghc ./haskell/main.hs && ./haskell/main.hs"
+run = "ghc ./haskell/main.hs && ./haskell/main"
