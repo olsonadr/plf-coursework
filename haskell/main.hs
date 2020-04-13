@@ -2,41 +2,35 @@ main :: IO()
 main = print ("File loaded!")
 
 
--- Creating Bag type --
-type Bag a = [(a, Int)]
+-- Import recommended utilities --
+import HW1types
 
 
--- ins function: inserts element into a multiset --
-ins :: Eq a => a -> Bag a -> Bag a
-ins val b   = [(val, 1)] -- placeholder --
+-- Creating necessary types --
+type Node   = Int
+type Edge   = (Node,Node)
+type Graph  = [Edge]
+type Path   = [Node]
 
 
--- del function: removes an element from a multiset --
-del :: Eq a => a -> Bag a -> Bag a
-del val b   = [(val, 1)] -- placeholder --
+-- nodes function: computes list of nodes in a graph --
+nodes :: Graph -> [Node]
+nodes [] = [] -- placeholder --
 
 
--- bag function: converts list of vals into a multiset rep --
-bag :: Eq a => [a] -> Bag a
-bag []      = []
-bag (x:xs)  = [(x, 1)] -- placeholder --
+-- suc function: computes list of successors of a node in a graph --
+suc :: Node -> Graph -> [Node]
+suc _ [] = []
+suc x gr = [] -- placeholder --
 
 
--- subbag function: checks if one bag is contained in the second --
-subbag :: Eq a => Bag a -> Bag a -> Bool
-subbag [] _     = True
-subbag b1 b2    | size b1 > size b2 = False
-                | otherwise = True -- placeholder --
+-- detach function: removes a node and its edges from a graph --
+detach :: Node -> Graph -> Graph
+detach _ [] = []
+detach x gr = gr -- placeholder --
 
 
--- isbag function: computes intersection of two multisets --
-isbag :: Eq a => Bag a -> Bag a -> Bag a
-isbag [] _      = []
-isbag _ []      = []
-isbag b1 b2     = b1 -- placeholder --
-
-
--- size function: computes number of elements in a multiset --
-size :: Bag a -> Int
-size []         = 0
-size ((x,n):xs) = n + size xs
+-- cyc function: creates a cycle for a given number of nodes --
+cyc :: Int -> Graph
+cyc 0 = []
+cyc n = [] -- placeholder --
