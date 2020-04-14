@@ -3,7 +3,7 @@ main = print ("File loaded!")
 
 
 -- Import recommended utilities --
-import HW1types
+-- import HW1types
 
 
 -- Creating necessary types --
