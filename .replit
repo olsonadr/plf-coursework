@@ -1,2 +1,2 @@
 language = "haskell"
-run = "ghc --interactive ./haskell/main.hs && ./haskell/main"
+run = "ghci ./haskell/main.hs"

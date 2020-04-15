@@ -1,6 +1,3 @@
-main :: IO()
-main = print ("File loaded!")
-
 
 -- Creating Bag type --
 type Bag a = [(a, Int)]
@@ -66,3 +63,42 @@ subbag :: Eq a => Bag a -> Bag a -> Bool
 subbag [] _             = True
 subbag b1 b2            = bagsEqual b1 (isbag b1 b2)
 
+
+-- Bag Unit tests
+test_bag = [(5,1),(7,3),(2,1),(3,2),(8,1)]
+bg_test = do
+    print ""
+    print "~--      Bags      --~"
+    print ("Insertion == {")
+    print ("    " ++ show (ins 99 test_bag == [(5,1),(7,3),(2,1),(3,2),(8,1),(99,1)]))
+    print ("    " ++ show (ins 3 test_bag == [(5,1),(7,3),(2,1),(3,3),(8,1)]))
+    print ("    " ++ show ((ins 7 $ ins 8 test_bag) == [(5,1),(7,4),(2,1),(3,2),(8,2)]))
+    print ("}")
+    print ("Deletion  == {")
+    print ("    " ++ show (del 99 test_bag == test_bag))
+    print ("    " ++ show (del 3 test_bag == [(5,1),(7,3),(2,1),(3,1),(8,1)]))
+    print ("    " ++ show (del 2 test_bag == [(5,1),(7,3),(3,2),(8,1)]))
+    print ("}")
+    print ("Creation  == {")
+    print ("    " ++ show (bag [2,3,3,5,7,7,7,8] == [(8,1),(7,3),(5,1),(3,2),(2,1)]))
+    print ("    " ++ show (bag [7,3,8,7,3,2,7,5] == [(5,1),(7,3),(2,1),(3,2),(8,1)]))
+    print ("}")
+    print ("Subbag    == {")
+    print ("    " ++ show (subbag [(5,1),(7,5),(2,1),(3,2),(8,1)] test_bag == False))
+    print ("    " ++ show (subbag [(5,1),(7,1),(2,1),(3,1),(8,1)] test_bag == True))
+    print ("    " ++ show (subbag [(5,1),(7,3),(2,1),(8,1)] test_bag == True))
+    print ("    " ++ show (subbag test_bag [(5,1),(7,3),(2,1),(8,1)] == False))
+    print ("    " ++ show (subbag test_bag test_bag == True))
+    print ("}")
+    print ("IsBag     == {")
+    print ("    " ++ show (isbag [(5,2),(7,3),(2,1),(8,1)] [(5,1),(99,1)] == [(5,1)]))
+    print ("    " ++ show (isbag [(1, 1)] [] == []))
+    print ("    " ++ show (isbag [] [(1, 1)] == []))
+    print ("}")
+    print ("Size      == {")
+    print ("    " ++ show (size [] == 0))
+    print ("    " ++ show (size [(1, 1)] == 1))
+    print ("    " ++ show (size [(1, 8)] == 8))
+    print ("    " ++ show (size [(1, 3),(2,7)] == 10))
+    print ("    " ++ show (size test_bag == 8))
+    print ("}")
