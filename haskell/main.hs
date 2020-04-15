@@ -149,3 +149,4 @@ sh_test = do
     print ("    " ++ show (inside (Rect (0, 0) 1 1) (Circle (0, 0) 8) == True))
     print ("    " ++ show (inside (Rect (0, 0) 1 1) (Circle (0, 0) 1) == False))
     print ("}")
+    print ("BLAH BLAH TEST")
