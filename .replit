@@ -1,2 +1,2 @@
 language = "polygott"
-run = "ghci ./haskell/main.hs"
+run = "python index.py"

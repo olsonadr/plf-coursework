@@ -1,3 +1,4 @@
+module HW1 where
 
 -- ====================================== --
 -- ========= Importing Utils ============ --
@@ -354,3 +355,11 @@ sh_test = do
     print ("    " ++ show (inside (Rect (0, 0) 1 1) (Circle (0, 0) 8) == True))
     print ("    " ++ show (inside (Rect (0, 0) 1 1) (Circle (0, 0) 1) == False))
     print ("}")
+
+-- Main function (help)
+main = do
+    putStrLn "HW1 Loading! Available helper functions:"
+    putStrLn " ~= bg_test  :  test Bag functions"
+    putStrLn " ~= gr_test  :  test Graph functions"
+    putStrLn " ~= sh_test  :  test Shape functions"
+    putStrLn " "
