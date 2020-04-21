@@ -43,7 +43,7 @@ dlStr _ = "wow"
 
 -- dlPP function: pretty printer for digital logic circuits --
 dlPP :: Circuit -> IO()
-dlPP C = putStrLn (dlToString C)
+dlPP c = putStrLn (dlStr c)
 
 
 
