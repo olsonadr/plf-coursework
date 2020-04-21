@@ -1,2 +1,2 @@
-language = "polyglott"
+language = "polygott"
 run = "ghci ./haskell/main.hs"
