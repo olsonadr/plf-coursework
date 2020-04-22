@@ -13,9 +13,9 @@ module HW2 where
 -- links    ::= from num.num to num.num; links | ϵ
 
 type Circuit = ([Gate], [Link])
-type Gate = (Int, GateFN)
+type Gate = (Integer, GateFN)
 data GateFN = AND | OR | XOR | NOT deriving Show
-type Link = ((Int, Int), (Int, Int))
+type Link = ((Integer, Integer), (Integer, Integer))
 -- Link = ((Gate_Idx_1, IO_Idx_1), (Gate_Idx_2, IO_Idx_2)
 
 
@@ -37,9 +37,25 @@ ha = ([(1, XOR),(2, AND)], [((1,1),(2,1)), ((1,2),(2,2))])
 
 -- == For DigitalCircuits == --
 
--- dlStr function: digital logic circuit toString method --
+-- linkStr function: single Link toString method --
+linkStr :: Link -> String
+linkStr ((g1, i1), (g2, i2)) = "\t\tGate"++show g1++" [" ++ show i1 ++ "]\t->\t Gate"++show g2++" [" ++ show i2 ++ "]\n"
+
+-- gateStr function: single Gate toString method --
+gateStr :: Gate -> String
+gateStr (i, fn)     = "\t\tGate" ++ show i ++ " is " ++ show fn ++ "\n"
+
+-- _dlStr function: actual digital logic circuit toString method --
+_dlStr :: Circuit -> String
+_dlStr ((g:[]), ls)  = (gateStr g) ++ "\n~= Links between gates:\n" ++ (_dlStr ([], ls))
+_dlStr ((g:gs), ls)  = (gateStr g) ++ (_dlStr (gs, ls))
+_dlStr ([], (l:ls))  = (linkStr l) ++ (_dlStr ([], ls))
+_dlStr ([], [])      = "\n"
+
+-- dlStr function: digital logic circuit toString wrapper for adding header --
 dlStr :: Circuit -> String
-dlStr _ = "wow"
+dlStr c = "\n~= Gates in digital circuit:\n" ++ (_dlStr c)
+
 
 -- dlPP function: pretty printer for digital logic circuits --
 dlPP :: Circuit -> IO()
