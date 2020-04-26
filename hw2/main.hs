@@ -193,7 +193,7 @@ programToString :: Cmd -> String
 programToString (Pen m)        = "pen " ++ show m ++ "\n"
 programToString (MoveTo a b)   = "moveto (" ++ show a ++ "," ++ show b ++ ")\n"
 programToString (Def n p c)    = "def " ++ n ++ " ( " ++ show p ++ " ) " ++ show c ++ "\n"
-programToString (Call n a)     = "call " ++ n ++ "( " ++ show a ++ " )\n"
+programToString (Call n a)     = "call " ++ n ++ " ( " ++ show a ++ " )\n"
 programToString (SeqC c1 c2)   = programToString c1 ++ programToString c2
 
 -- programPP function: pretty prints a command that is a program with newlines --
