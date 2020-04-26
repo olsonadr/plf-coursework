@@ -18,22 +18,22 @@ module HW2 where
 -- vals     ::= 'num', 'vals' | 'num'
 
 
-data Cmd    = Pen     Mode                  -- change pen mode (up or down)
-            | MoveTo  Pos Pos               -- move pen to given position
-            | Def     String Params Cmd     -- define macro with name, parameters, and body
-            | Call    String Args           -- call macro with given name, passing in values
-            | SeqC    Cmd Cmd               -- allow chaining of commands
+data Cmd    = Pen     Mode               -- change pen mode (up or down)
+            | MoveTo  Pos Pos            -- move pen to given position
+            | Def     String Params Cmd  -- def macro with name, params, body
+            | Call    String Args        -- call macro of name, arg values
+            | SeqC    Cmd Cmd            -- allow chaining of commands
 
-data Mode   = Up | Down                     -- allowed pen modes
+data Mode   = Up | Down                  -- allowed pen modes
 
-data Pos    = Num Integer                   -- allowing numerical positions      
-            | Var String                    -- allowing variable names
+data Pos    = Num Integer                -- allowing numerical positions      
+            | Var String                 -- allowing variable names
 
-data Params = SeqP String Params            -- allowing chaining of multiple params
-            | OneP String                   -- enforcing at least one (not a list)
+data Params = SeqP String Params         -- allowing chaining of multiple params
+            | OneP String                -- enforcing at least one (not a list)
 
-data Args   = SeqA Integer Args             -- allowing chaining of multiple args
-            | OneA Integer                  -- enforcing at least one (not a list)
+data Args   = SeqA Integer Args          -- allowing chaining of multiple args
+            | OneA Integer               -- enforcing at least one (not a list)
 
 
 -- Show functions to check if correctly matching the concrete syntax --
@@ -98,9 +98,52 @@ vector = (Def ("vector")                                        -- macro name
 
 -- == For MiniLogo == --
 
+-- cant use these but I wish we could (no addition defined in MiniLogo)
+-- -- createStepMacro function: creates def for macro that draws one step
+-- -- createStepCalls function: creates N calls of one step macro
+-- end of what we cant use
+ 
+
+-- createStepMacro function: creates def for macro that draws one step --
+-- def drawpath ( x1, y1, x2, y2, x3, y3 ) from a starting point, draw a path including second point to third
+createStepMacro :: Cmd
+createStepMacro = (Def ("drawpath")                                                               -- macro name
+                       (SeqP "x1" (SeqP "y1" (SeqP "x2" (SeqP "y2" (SeqP "x3"  (OneP "y3"))))))   -- macro parameters
+                       (SeqC (Pen Up)                                                             -- start macro commands
+                             (SeqC (MoveTo (Var "x1") (Var "y1"))
+                                   (SeqC (Pen Down)
+                                         (SeqC (MoveTo (Var "x2") (Var "y2"))
+                                               (SeqC (MoveTo (Var "x3") (Var "y3"))
+                                                     (Pen Up))))))                                -- end macro commands
+                   ) :: Cmd
+
+
+--call = (Call "drawpath" (SeqA n (SeqA n (SeqA (n-1) (SeqA n (SeqA (n-1) (OneA (n-1))))))) :: Cmd
+
+-- createStepCalls function: creates N calls of one step macro --
+createStepCalls :: Integer -> Cmd
+createStepCalls n | n <= 0    = Pen Up
+                  | n == 1    = (Call "drawpath" (SeqA n (SeqA n (SeqA (n-1) (SeqA n (SeqA (n-1) (OneA (n-1))))))))
+                  | otherwise = (SeqC (Call "drawpath" (SeqA n (SeqA n (SeqA (n-1) (SeqA n (SeqA (n-1) (OneA (n-1)))))))) (createStepCalls (n-1)))
+
+
+-- programToString function: formats a command with newlines (as in a program) --
+programToString :: Cmd -> String 
+programToString (Pen m)        = "pen " ++ show m ++ "\n"
+programToString (MoveTo a b)   = "moveto (" ++ show a ++ "," ++ show b ++ ")\n"
+programToString (Def n p c)    = "def " ++ n ++ " ( " ++ show p ++ " ) " ++ show c ++ "\n"
+programToString (Call n a)     = "call " ++ n ++ "( " ++ show a ++ " )\n"
+programToString (SeqC c1 c2)   = programToString c1 ++ programToString c2
+
+
+-- programPP function: pretty prints a command that is a program with newlines --
+programPP :: Cmd -> IO ()
+programPP c = putStrLn (programToString c)
+
+
 -- steps function: creates MiniLogo program that draws stairs of n steps --
 steps :: Int -> Cmd
-steps _ = Pen Up; -- placeholder --
+steps n = (SeqC createStepMacro (createStepCalls (toInteger n)))
 
 
 
@@ -108,10 +151,22 @@ steps _ = Pen Up; -- placeholder --
 -- ========== Helper Functions ========== --
 -- ====================================== --
 
+-- MiniLogo testing
+ml_test = do
+    putStrLn "\n~= Testing MiniLogo questions:\n"
+    putStrLn ("~= vector macro should be:\n" ++ vector_correct ++ "\n\n~= and is (defined on line 84):\n" ++ show vector ++ "\n\n")
+    putStrLn ("~= (steps 2) program (pretty printed):")
+    programPP (steps 2)
+    putStrLn ("\n~= (steps 4) program (pretty printed):")
+    programPP (steps 4)
+    putStrLn "\n~= End MiniLogo testing\n"
+
+
 -- Main function (on load)
 main = do
-    putStrLn "HW2 Loading! Available helper functions:"
-    --putStrLn " ~= bg_test  :  test Bag functions"
+    putStrLn "HW2 Loading! Usage:"
+    putStrLn " ~= ml_test   :  test MiniLogo functions"
+    putStrLn " ~= programPP :  function to pretty print a sequence of commands with newlines (i.e. programPP (Pen Up) )"
     --putStrLn " ~= gr_test  :  test Graph functions"
     --putStrLn " ~= sh_test  :  test Shape functions"
     putStrLn " "
