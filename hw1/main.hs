@@ -263,7 +263,7 @@ inside sh1 sh2                          = bboxInside (bbox sh1) (bbox sh2)
 
 
 -- ====================================== --
--- =========== Function tests =========== --
+-- ========== Helper Functions ========== --
 -- ====================================== --
 
 -- Bag Unit tests
