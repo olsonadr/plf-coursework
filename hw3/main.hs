@@ -5,32 +5,28 @@ module HW3 where
 -- ========= Defining Datatypes ========= --
 -- ====================================== --
 
--- == For StackLanguage == --
+-- == For MiniLogo == --
 
--- S ::= C | C;S
--- C ::= LD Int | ADD | MULT | DUP
+data CmdML  = Pen Mode
+            | MoveTo Int Int
+            | Seq CmdML CmdML deriving Show
+data Mode   = Up | Down deriving Show
 
-type Prog   = [Cmd]
-data Cmd    = LD Int
-            | ADD
-            | MULT
-            | DUP deriving Show
-type Stack = [Int]
+type State  = (Mode, Int, Int) -- mode and location of pen
 
-type StackState = Maybe Stack
-type D = StackState -> StackState
-
+type Line   = (Int,Int,Int,Int)
+type Lines  = [Line]
 
 
 -- ====================================== --
 -- ============ Test Examples =========== --
 -- ====================================== --
 
--- == For StackLanguage == --
+-- == For MiniLogo == --
 
-slP1 = [LD 3,DUP,ADD,DUP,MULT] :: Prog
-slP2 = [LD 3,ADD] :: Prog
-slP3 = [] :: Prog
+mlP1 = (MoveTo 0 (-1)) `Seq` (Pen Down) `Seq` (MoveTo 0 1) :: CmdML -- draws a vertical line at the origin
+mlP2 = (MoveTo (-1) (-1)) `Seq` (Pen Down) `Seq` (MoveTo 1 1) `Seq` (Pen Up) `Seq` (MoveTo (-1) 1) `Seq` (Pen Down) `Seq` (MoveTo 1 (-1)) :: CmdML -- draws an X at the origin
+mlP3 = (Pen Down) `Seq` (MoveTo 0 1) `Seq` (MoveTo 1 1) `Seq` (MoveTo 1 2) `Seq` (MoveTo 2 2) `Seq` (MoveTo 2 0) `Seq` (MoveTo 0 0) `Seq` (Pen Up) `Seq` (MoveTo 0 (-1)) `Seq` (MoveTo 1 (-1)) :: CmdML -- draws staircase with a line below
 
 
 
@@ -38,15 +34,16 @@ slP3 = [] :: Prog
 -- ======== Function Defintions ========= --
 -- ====================================== --
 
--- == For StackLanguage == --
+-- == For MiniLogo == --
 
--- sem: semantic function for a full program --
-sem :: Prog -> D
-sem pr st = st
+-- semS: semantic function for ML commands w/ initial state --
+semS :: CmdML -> State -> (State, Lines)
+semS cmd st = (st, [])
 
--- semCmd: semantic function for a single command in a program --
-semCmd :: Cmd -> D
-semCmd cmd st = st
+-- sem': semantic function for ML commands w/o initial state --
+sem' :: CmdML -> Lines
+sem' cmd = case (semS cmd (Up, 0, 0)) of
+                (st, lns) -> lns
 
 
 
@@ -54,20 +51,22 @@ semCmd cmd st = st
 -- ========== Helper Functions ========== --
 -- ====================================== --
 
--- StackLanguage test function
-sl_test = do
-    putStrLn "\n~= Testing StackLanguage questions:\n"
-    putStrLn "~= semantic results of example programs on empty starting stacks:\n"
-    putStrLn ("   sem (" ++ show slP1 ++ ") [] = " ++ show (sem slP1 (Just [])) ++ "")
-    putStrLn ("   sem (" ++ show slP2 ++ ") [] = " ++ show (sem slP2 (Just [])) ++ "")
-    putStrLn ("   sem (" ++ show slP3 ++ ") [] = " ++ show (sem slP3 (Just [])) ++ "")
-    putStrLn "~= End StackLanguage testing\n"
+-- MiniLogo test function
+ml_test = do
+    putStrLn "\n~= Testing MiniLogo questions:\n"
+    putStrLn "~= semantic results of example commands with default state:\n"
+    putStrLn ("   sem' (" ++ show mlP1 ++ ") [] = " ++ show (sem' mlP1) ++ "")
+    putStrLn ("   sem' (" ++ show mlP2 ++ ") [] = " ++ show (sem' mlP2) ++ "")
+    putStrLn ("   sem' (" ++ show mlP3 ++ ") [] = " ++ show (sem' mlP3) ++ "")
+    putStrLn "~= the results should also be pretty printed in SVG files"
+    putStrLn "\n~= End MiniLogo testing\n"
 
 -- Help function
 help = do
     putStrLn "\nHW3 Loading! Functions:"
     putStrLn " ~= help      : re-display this message"
     putStrLn " ~= sl_test   : test StackLanguage functions"
+    putStrLn " ~= ml_test   : test MiniLogo functions"
     putStrLn " "
 
 -- Main function (help)
