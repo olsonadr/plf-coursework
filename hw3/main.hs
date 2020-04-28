@@ -42,11 +42,25 @@ slP3 = [] :: Prog
 
 -- sem: semantic function for a full program --
 sem :: Prog -> D
-sem pr st = st
+sem _ (Nothing)         = Nothing
+sem [] (Just st)        = (Just st)
+sem (c:ps) (Just st)    = sem ps (semCmd c (Just st))
+
 
 -- semCmd: semantic function for a single command in a program --
 semCmd :: Cmd -> D
-semCmd cmd st = st
+-- semCmd _ (Nothing) = Nothing                -- unnecessary
+semCmd (LD i) (Just st) = (Just (i:st))
+semCmd (ADD)  (Just st) = case st of
+                                (i1:(i2:ls)) -> (Just ((i1+i2):ls))
+                                _            -> Nothing
+semCmd (MULT) (Just st) = case st of
+                                (i1:(i2:ls)) -> (Just ((i1*i2):ls))
+                                _            -> Nothing
+semCmd (DUP)  (Just st) = case st of
+                                (i1:ls) -> (Just (i1:(i1:ls)))
+                                _       -> Nothing
+semCmd _ _              = Nothing
 
 
 
@@ -61,7 +75,7 @@ sl_test = do
     putStrLn ("   sem (" ++ show slP1 ++ ") [] = " ++ show (sem slP1 (Just [])) ++ "")
     putStrLn ("   sem (" ++ show slP2 ++ ") [] = " ++ show (sem slP2 (Just [])) ++ "")
     putStrLn ("   sem (" ++ show slP3 ++ ") [] = " ++ show (sem slP3 (Just [])) ++ "")
-    putStrLn "~= End StackLanguage testing\n"
+    putStrLn "\n~= End StackLanguage testing\n"
 
 -- Help function
 help = do
