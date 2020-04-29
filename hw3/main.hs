@@ -28,7 +28,7 @@ type LinesML = [LineML]
 
 mlP1 = (MoveTo 0 0) `Seq` (Pen Down) `Seq` (MoveTo 0 3) :: CmdML -- draws a vertical line
 mlP2 = (MoveTo 0 0) `Seq` (Pen Down) `Seq` (MoveTo 5 5) `Seq` (Pen Up) `Seq` (MoveTo 0 5) `Seq` (Pen Down) `Seq` (MoveTo 5 0) :: CmdML -- draws an X at the origin
-mlP3 = (Pen Down) `Seq` (MoveTo 0 1) `Seq` (MoveTo 1 1) `Seq` (MoveTo 1 2) `Seq` (MoveTo 2 2) `Seq` (MoveTo 2 0) `Seq` (MoveTo 0 0) `Seq` (Pen Up) `Seq` (MoveTo 0 (-1)) `Seq` (MoveTo 1 (-1)) :: CmdML -- draws staircase with a line below
+mlP3 = (MoveTo 0 1) `Seq` (Pen Down) `Seq` (MoveTo 0 2) `Seq` (MoveTo 1 2) `Seq` (MoveTo 1 3) `Seq` (MoveTo 2 3) `Seq` (MoveTo 2 1) `Seq` (MoveTo 0 1) `Seq` (Pen Up) `Seq` (MoveTo 0 0) `Seq` (Pen Down) `Seq` (MoveTo 2 0) :: CmdML -- draws staircase with a line below
 
 
 
