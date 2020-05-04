@@ -20,6 +20,7 @@ type LineML  = (Int,Int,Int,Int) -- (x1,y1,x2,y2)
 type LinesML = [LineML]
 
 
+
 -- ====================================== --
 -- ============ Test Examples =========== --
 -- ====================================== --
@@ -85,7 +86,6 @@ ml_pp3 = do
     ppLines (sem' mlP3)
     putStrLn "    ppLines (sem' mlP3)"
     putStrLn "\n~= Done pretty printing mlP3\n"
-
 
 -- Help function
 help = do
