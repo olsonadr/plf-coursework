@@ -15,7 +15,7 @@ data Cmd    = LD Int
             | ADD
             | MULT
             | DUP deriving Show
-type Stack = [Int]
+type Stack  = [Int]
 
 type StackState = Maybe Stack
 type D = StackState -> StackState
@@ -45,7 +45,6 @@ sem :: Prog -> D
 sem _ (Nothing)         = Nothing
 sem [] (Just st)        = (Just st)
 sem (c:ps) (Just st)    = sem ps (semCmd c (Just st))
-
 
 -- semCmd: semantic function for a single command in a program --
 semCmd :: Cmd -> D
