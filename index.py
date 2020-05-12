@@ -6,11 +6,12 @@ print("Table of Contents Loaded!\n\n~= Load a homework file with command \"loadX
 print("    (1) HW1 - Bags, Shapes, Graphs")
 print("    (2) HW2 - Abstract Syntax")
 print("    (3) HW3 - Semantics")
+print("    (4) HW4 - Types")
 print("    (-) exit\n")
 
 
 def isValid(choice):
-    good_choices = ["1", "load1", "2", "load2", "3", "load3", "exit"]
+    good_choices = ["1", "load1", "2", "load2", "3", "load3", "4", "load4", "exit", "-"]
     for good in good_choices:
         if choice == good:
             return True
@@ -32,6 +33,9 @@ if user_choice and user_choice != "exit" and user_choice != "-":
 
     elif user_choice[-1] == '3':
         os.system("cd hw3; runhaskell main.hs; ghci main.hs")
+    
+    elif user_choice[-1] == '4':
+        os.system("cd hw4; runhaskell main.hs; ghci main.hs")
 
     else:
         print("Module not found...")
