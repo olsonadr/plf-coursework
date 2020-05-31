@@ -45,5 +45,19 @@ flat(L,F) :- F=L. /*dummy*/
 /* flat([1,[1,2],[2]], [1,1,2,2]). => true */
 
 /* Part (c) - project[3] selects elements from list L by positions in list I and collects them in a result list R (I,L,R) */
-project(I,L,R) :- I=I. /*dummy*/
+subeach(I,R) :- (I=[], R=[]) ; (append([FirstI],RestI,I), append([FirstR],RestR,R), FirstR is (FirstI-1), subeach(RestI,RestR)).
+haszero([0|_]).
+haszero([_|IS]) :- haszero(IS).
+project(_,[],[]).
+project(I,[_|LS],R) :- not(haszero(I)), subeach(I,NextI), project(NextI,LS,R).
+project(I,[L|LS],R) :- haszero(I), subeach(I,NextI), project(NextI,LS,PrevR), append([L],PrevR,R).
 
+/*
+[0,2,3], 	[1,2,3,4,5,6], 	[1,3,4]
+[-1,1,2], 	[2,3,4,5,6], 	[3,4]
+[-2,0,1], 	[3,4,5,6], 		[3,4]
+[-3,-1,0], 	[4,5,6], 		[4]
+[-4,-2,-1], [5,6], 			[]
+[-5,-3,-2], [6], 			[]
+[-6,-4,-3], [], 			[]
+*/
